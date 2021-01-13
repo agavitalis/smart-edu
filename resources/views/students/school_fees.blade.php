@@ -47,10 +47,9 @@
                     </div>
                     <div class="x_content">
                         <br/>
-                        <form class="form-horizontal form-label-left input_mask" action="#" method="post">
+                        <form class="form-horizontal form-label-left input_mask" action="/student/generate_school_fees_invoice" method="post">
                             {{csrf_field()}}
                            
-                            
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Level <span
                                         class="required">*</span>

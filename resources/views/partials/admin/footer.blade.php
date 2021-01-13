@@ -19,7 +19,7 @@
             </div>
           @endif
           <div class="pull-right">
-            Powered By  <a href="https://vivvaa">Vivvaa Solutions</a>
+            Powered By  <a href="https://vivvaa.com">Vivvaa Solutions</a>
           </div>
           <div class="clearfix"></div>
         </footer>

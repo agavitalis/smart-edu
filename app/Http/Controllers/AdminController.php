@@ -205,6 +205,12 @@ class AdminController extends Controller
 
             return view('admin.registerstudents', compact('sessions', 'levels', 'klasses', 'terms'));
         } elseif ($request->isMethod('POST')) {
+
+            //check for dupliate entry
+            $student = User::where(['username'=>$request->username])->first();
+            if($student != null){
+                return back()->with('error','Duplicate Reg Number/Username');
+            }
             //since we are creating a new guy now
             $student = new User();
 
@@ -342,7 +348,7 @@ class AdminController extends Controller
         }
     }
 
-//i took care of the admin here
+    //i took care of the admin here
     public function adminprofile()
     {
 
@@ -392,7 +398,7 @@ class AdminController extends Controller
         }
     }
 
-//teachers
+    //teachers
 
     public function registerteachers(Request $request)
     {
@@ -438,7 +444,7 @@ class AdminController extends Controller
         })->download($type);
     }
 
-//here I read the excelfile
+    //here I read the excelfile
     public function importsteacher(Request $request)
     {
 
@@ -553,7 +559,7 @@ class AdminController extends Controller
         }
     }
 
-//i assigned classes and subjects here
+    //i assigned classes and subjects here
     public function assignsubject(Request $request)
     {
         if ($request->isMethod('GET')) {
