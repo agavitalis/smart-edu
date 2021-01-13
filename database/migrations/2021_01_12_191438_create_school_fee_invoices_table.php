@@ -22,7 +22,7 @@ class CreateSchoolFeeInvoicesTable extends Migration
             $table->string('class');
             $table->string('amount_paid')->nullable();
             $table->boolean('is-paid')->default(false);
-            $table->bigInterger('user_id');
+            $table->bigInteger('user_id');
             $table->timestamps();
         });
     }
