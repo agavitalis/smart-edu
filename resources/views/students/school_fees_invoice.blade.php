@@ -226,7 +226,7 @@
                             <!-- this row will not appear when printing -->
                             <div class="row no-print">
                                 <div class="col-xs-12">
-                                    <button class="btn btn-success pull-right" onclick=""><i
+                                    <button class="btn btn-success pull-right pay" onclick="pay()"><i
                                             class="fa fa-google-wallet"></i> Pay Now</button>
                                     <button class="btn btn-default pull-right" onclick="printthis()"><i
                                             class="fa fa-print"></i> Print</button>
@@ -259,6 +259,6 @@
 @endsection
 
 @section('scripts')
-<script src="https://api.ravepay.co/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script>
+<!-- <script src="https://api.ravepay.co/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script> -->
 <script src="../../js/school_fees.js"></script>
 @endsection
