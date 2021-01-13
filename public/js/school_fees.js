@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    alert("I am alive")
     const API_publicKey = "FLWPUBK_TEST-6ed373149166c784cf560090702de235-X";
 
     function payWithRave(email, amount, phone, scholarship_id,user_id) {
@@ -65,59 +66,61 @@ $(document).ready(function() {
     }
 
     $(".pay").click(function() {
+
+        alert("I entered")
         //let id = $("#profile_id").val();
-        let user_id = $("#user_id").val();
+        // let user_id = $("#user_id").val();
 
-        if (
-            user_id == "" 
-        ) {
-            alert("Please fill all fileds");
-        } else {
-            //Update this guy details and confirm if he is applying for
-            //the right scholarship
-            // $.ajax({
-            //     type: "post",
-            //     url: "/student/scholarship_update_profile",
-            //     data: {
-            //         _token: $("input[name=_token]").val(),
-            //         first_name: first_name,
-            //         last_name: last_name,
-            //         email: email,
-            //         phone: phone,
-            //         category: category,
-            //         school_name: school_name,
-            //         level: level,
-            //         exp_year_of_graduation: exp_year_of_graduation,
-            //         country: country,
-            //         state_of_orgin: state_of_orgin,
-            //         lga: lga,
-            //         address: address,
-            //         id: id,
-            //         user_id: user_id
-            //     },
-            //     success: function(response) {
-            //         if (response.code == 200) {
-            //             $(".update-successful").removeClass("d-none");
-            //             setTimeout(() => {
-            //                 payWithRave(email, amount, phone, scholarship_id, user_id);
-            //             }, 3000);
-            //         } else if (response.code == 301) {
-            //             console.log(response.message);
-            //             $(".update-error").removeClass("d-none");
-            //             setTimeout(() => {
-            //                 locacation.reload();
-            //             }, 2000);
+        // if (
+        //     user_id == "" 
+        // ) {
+        //     alert("Please fill all fileds");
+        // } else {
+        //     //Update this guy details and confirm if he is applying for
+        //     //the right scholarship
+        //     // $.ajax({
+        //     //     type: "post",
+        //     //     url: "/student/scholarship_update_profile",
+        //     //     data: {
+        //     //         _token: $("input[name=_token]").val(),
+        //     //         first_name: first_name,
+        //     //         last_name: last_name,
+        //     //         email: email,
+        //     //         phone: phone,
+        //     //         category: category,
+        //     //         school_name: school_name,
+        //     //         level: level,
+        //     //         exp_year_of_graduation: exp_year_of_graduation,
+        //     //         country: country,
+        //     //         state_of_orgin: state_of_orgin,
+        //     //         lga: lga,
+        //     //         address: address,
+        //     //         id: id,
+        //     //         user_id: user_id
+        //     //     },
+        //     //     success: function(response) {
+        //     //         if (response.code == 200) {
+        //     //             $(".update-successful").removeClass("d-none");
+        //     //             setTimeout(() => {
+        //     //                 payWithRave(email, amount, phone, scholarship_id, user_id);
+        //     //             }, 3000);
+        //     //         } else if (response.code == 301) {
+        //     //             console.log(response.message);
+        //     //             $(".update-error").removeClass("d-none");
+        //     //             setTimeout(() => {
+        //     //                 locacation.reload();
+        //     //             }, 2000);
 
-            //             $(".withdrawal-message").text(
-            //                 "You don't have any active investment"
-            //             );
-            //         }
-            //     },
-            //     errors: function(error) {
-            //         console.log(error.message);
-            //     }
-            // });
-        }
+        //     //             $(".withdrawal-message").text(
+        //     //                 "You don't have any active investment"
+        //     //             );
+        //     //         }
+        //     //     },
+        //     //     errors: function(error) {
+        //     //         console.log(error.message);
+        //     //     }
+        //     // });
+        // }
     });
 });
 
