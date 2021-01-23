@@ -19,10 +19,10 @@ class CreateSchoolFeeInvoicesTable extends Migration
             $table->string('session');
             $table->string('level');
             $table->string('term');
-            $table->string('class');
+            $table->string('amount')->nullable();
             $table->string('amount_paid')->nullable();
-            $table->boolean('is-paid')->default(false);
-            $table->bigInterger('user_id');
+            $table->string('status')->default("NOT PAID");
+            $table->bigInteger('user_id');
             $table->timestamps();
         });
     }

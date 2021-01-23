@@ -129,7 +129,9 @@ Route::group(['prefix' => 'admin','namespace'=>"Admin"], function() {
 Route::group(['prefix' => 'student','namespace'=>"Student"], function() {
 
 	Route::match(['GET','POST'],'/generate_school_fees_invoice','SchoolFeesController@generate_invoice')->name('student_generate_invoice');
-	
+	Route::match(['GET','POST'],'/complete_school_fees_payment','SchoolFeesController@complete_payment')->name('student_complete_school_fees');
+	Route::match(['GET'],'/print_school_fees_recipts','SchoolFeesController@school_fees_recipts')->name('student_school_fees_recipts');
+
 });
 
 

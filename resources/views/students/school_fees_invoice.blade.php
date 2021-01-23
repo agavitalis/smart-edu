@@ -77,23 +77,23 @@
                                     <address>
 
                                         <div class="col-md-12  col-sm-12 col-xs-12 invoice-col text-center">
-                                            <p> <strong>Name: {{Auth::user()->name}}</strong> </p>
+                                            <p style="margin-bottom:0px"> <strong>Name: {{Auth::user()->name}}</strong> </p>
+                                            <p>Gender: {{Auth::user()->gender}} </p>
                                         </div>
                                         <div class="clearfix"></div>
                                         <div class="col-sm-6 col-xs-6 text-right">
 
-                                            <p><strong>Gender:</strong> {{Auth::user()->gender}}
-                                                <br><strong>Registration No:</strong> {{Auth::user()->username}}
+                                            <p>
+                                                <strong>Registration No:</strong> {{Auth::user()->username}}
                                                 <br><strong>Email:</strong> {{Auth::user()->email}}
                                                 <br><strong>Phone:</strong> {{Auth::user()->phone}}
                                             </p>
                                         </div>
 
                                         <div class="col-sm-6 col-xs-6 pull-right">
-                                            <p><strong>Session:</strong> {{$school_fees->session}}
-                                                <br><strong>Level:</strong> {{$school_fees->level}}
-                                                <br><strong>Class:</strong> {{$school_fees->klass}}
-                                                <br><strong>Term:</strong> {{$school_fees->term}}
+                                            <p><strong>Session:</strong> {{$school_fee_invoice->session}}
+                                                <br><strong>Level:</strong> {{$school_fee_invoice->level}}
+                                                <br><strong>Term:</strong> {{$school_fee_invoice->term}}
                                             </p>
                                         </div>
 
@@ -117,15 +117,15 @@
                             <div class="row margin-b">
                                 <div class="col-xs-12  margin-b">
                                     <div class="col-sm-6 col-xs-6 text-right ">
-                                        <h2><strong>Amount:&nbsp</strong>NGN {{$school_fees->amount}}
+                                        <h2><strong>Amount:&nbsp</strong>NGN {{$school_fee_invoice->amount}}
                                         </h2>
                                     </div>
 
                                     <div class="col-sm-6 col-xs-6 ">
                                         <h2>
-                                            <strong>Payment Status:&nbsp</strong> Paid
+                                            <strong>Payment Status:&nbsp</strong> {{$school_fee_invoice->status}}
 
-                                            </h3>
+                                        </h3>
                                     </div>
                                 </div>
                             </div>
@@ -138,23 +138,22 @@
                                     <table class="table result-print table-striped">
                                         <thead>
                                             <tr>
-                                                <th>No</th>
                                                 <th>Amount(NGN)</th>
                                                 <th>Status</th>
                                                 <th>Session</th>
+                                                <th>Level</th>
                                                 <th>Term</th>
-                                                <th>Class</th>
                                             </tr>
                                         </thead>
                                         <tbody>
 
                                             <tr>
-                                                <td>#</td>
-                                                <td style="width:20%;">{{$school_fees->amount}}</td>
+                                                <td>{{$school_fee_invoice->amount}}</td>
                                                 <td>Paid</td>
-                                                <td>{{$school_fees->session}}</td>
-                                                <td>{{$school_fees->term}}</td>
-                                                <td>{{$school_fees->klass}}</td>
+                                                <td>{{$school_fee_invoice->session}}</td>
+                                                <td>{{$school_fee_invoice->level}}</td>
+                                                <td>{{$school_fee_invoice->term}}</td>
+                                                
                                             </tr>
 
                                         </tbody>
@@ -163,10 +162,21 @@
                                 <!-- /.col -->
                             </div>
                             <!-- /.row -->
+                            <form>
+                                @csrf
+                                <input type="hidden" id="session" value="{{$school_fee_invoice->session}}">
+                                <input type="hidden" id="level" value="{{$school_fee_invoice->level}}">
+                                <input type="hidden" id="term" value="{{$school_fee_invoice->term}}">
+                                <input type="hidden" id="amount" value="{{$school_fee_invoice->amount}}">
+                                <input type="hidden" id="email" value="{{Auth::user()->email}}">
+                                <input type="hidden" id="username" value="{{Auth::user()->username}}">
+                                <input type="hidden" id="phone" value="{{Auth::user()->phone}}">
+                            
+                            </form>
 
                             <div class="row">
                                 <!-- accepted payments column -->
-                                <div class="col-xs-7">
+                                <div class="col-xs-12">
                                     <p>
                                     <h2>School Fees Payment Invoice</h2>
                                     </p>
@@ -174,28 +184,36 @@
                                         <tbody>
                                             <tr>
                                                 <th>Invoive Number:</th>
-                                                <td style="padding-top:.2em;">08443324</td>
+                                                <td style="padding-top:.2em;">{{$school_fee_invoice->invoice_number}}</td>
                                             </tr>
                                             <tr>
                                                 <th>Date Generated: </th>
-                                                <td style="padding-top:.2em;">4th June 2021</td>
+                                                <td style="padding-top:.2em;">{{$school_fee_invoice->created_at}}</td>
                                             </tr>
                                             <tr>
                                                 <th>Invoice Status:</th>
-                                                <td style="padding-top:.2em;">Paid</td>
+                                                <td style="padding-top:.2em;">{{$school_fee_invoice->status}}</td>
                                             </tr>
-
+                                            @if($school_fee_invoice->status === "PAID")
+                                            <tr>
+                                                <th>Date Paid:</th>
+                                                <td style="padding-top:.2em;">{{$school_fee_invoice->updated_at}}</td>
+                                            </tr>
+                                            @endif
+                                           
+                                 
 
                                         </tbody>
                                     </table>
                                 </div>
+                                
                                 <!-- /.col -->
-                                <div class="col-xs-5">
-                                    <p><i>BarCode</i></p>
+                                <div class="col-xs-12">
+                                    <p style="margin-top:1em"><i>Barcode</i></p>
                                     <div>
                                         <div style="text-align: center;">
 
-                                            <img src="data:image/png;base64,{{DNS1D::getBarcodePNG('123456789', 'C39+',1,60,array(0,0,0), true)}}"
+                                            <img src="data:image/png;base64,{{DNS1D::getBarcodePNG($school_fee_invoice->invoice_number, 'C39+',1,60,array(0,0,0), true)}}"
                                                 alt="barcode" /><br><br>
 
                                         </div>
@@ -226,8 +244,10 @@
                             <!-- this row will not appear when printing -->
                             <div class="row no-print">
                                 <div class="col-xs-12">
-                                    <button class="btn btn-success pull-right pay" onclick="pay()"><i
+                                    @if($school_fee_invoice->status !== "PAID")
+                                    <button class="btn btn-success pull-right pay"><i
                                             class="fa fa-google-wallet"></i> Pay Now</button>
+                                    @endif
                                     <button class="btn btn-default pull-right" onclick="printthis()"><i
                                             class="fa fa-print"></i> Print</button>
                                 </div>
@@ -259,6 +279,6 @@
 @endsection
 
 @section('scripts')
-<!-- <script src="https://api.ravepay.co/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script> -->
+<script src="https://api.ravepay.co/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script>
 <script src="../../js/school_fees.js"></script>
 @endsection

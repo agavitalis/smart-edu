@@ -1,54 +1,60 @@
 $(document).ready(function() {
-    alert("I am alive")
+  
     const API_publicKey = "FLWPUBK_TEST-6ed373149166c784cf560090702de235-X";
 
-    function payWithRave(email, amount, phone, scholarship_id,user_id) {
+    function payWithRave(session,level,term,username,email,phone,amount) {
         var x = getpaidSetup({
             PBFPubKey: API_publicKey,
             customer_email: email,
             amount: amount,
             customer_phone: phone,
             currency: "NGN",
-            txref: "Applicant-" + email + "-" + scholarship_id,
+            txref: session + "-" + term + "-" + username,
             meta: [
                 {
-                    metaname: "Scholarship ID",
-                    metavalue: scholarship_id
+                    metaname: "Session",
+                    metavalue: session
                 },
                 {
-                    metaname: "User Email",
-                    metavalue: email
+                    metaname: "Term",
+                    metavalue: term
+                },
+                {
+                    metaname: "Username",
+                    metavalue: username
                 }
             ],
             onclose: function() {},
             callback: function(response) {
-                var txref = response.data.data.txRef; // collect txRef returned and pass to a server page to complete status check.
+                let txref = response.data.data.txRef; 
+                let amount_paid = response.data.data.amount;
                 if (
                     response.data.data.chargeResponseCode == "00" ||
                     response.data.data.chargeResponseCode == "0"
                 ) {
-                    //Log this guy as applied
+                    //Log this student 
+                   
                     $.ajax({
                         type: "post",
-                        url: "/student/finalize_scholarship_application",
+                        url: "/student/complete_school_fees_payment",
                         data: {
                             _token: $("input[name=_token]").val(),
-                            scholarship_id: scholarship_id,
-                            user_id: user_id,
+                            session: session,
+                            term: term,
+                            level: level,
+                            username: username,
+                            email: email,
+                            phone: phone,
+                            amount_paid: amount_paid,
                             transaction_ref: txref
                         },
                         success: function(response) {
                             if (response.code == 200) {
-                        
-                                $(".success-message").text(response.message);
 
-                                setTimeout(() => {
-                                    window.location.href = response.redirect_url
-                                }, 2000);
-                                
-                                
-                            } else if (response.code == 301) {
-                                console.log(response.message);
+                              window.location.reload();
+                            
+                            } else if (response.code == 500) {
+                                console.log(response);
                             }
                         },
                         errors: function(error) {
@@ -67,63 +73,19 @@ $(document).ready(function() {
 
     $(".pay").click(function() {
 
-        alert("I entered")
-        //let id = $("#profile_id").val();
-        // let user_id = $("#user_id").val();
+        let session = $("#session").val();
+        let level = $("#level").val();
+        let term = $("#term").val();
+        let username = $("#username").val();
+        let email = $("#email").val();
+        let phone = $("#phone").val();
+        let amount = $("#amount").val();
 
-        // if (
-        //     user_id == "" 
-        // ) {
-        //     alert("Please fill all fileds");
-        // } else {
-        //     //Update this guy details and confirm if he is applying for
-        //     //the right scholarship
-        //     // $.ajax({
-        //     //     type: "post",
-        //     //     url: "/student/scholarship_update_profile",
-        //     //     data: {
-        //     //         _token: $("input[name=_token]").val(),
-        //     //         first_name: first_name,
-        //     //         last_name: last_name,
-        //     //         email: email,
-        //     //         phone: phone,
-        //     //         category: category,
-        //     //         school_name: school_name,
-        //     //         level: level,
-        //     //         exp_year_of_graduation: exp_year_of_graduation,
-        //     //         country: country,
-        //     //         state_of_orgin: state_of_orgin,
-        //     //         lga: lga,
-        //     //         address: address,
-        //     //         id: id,
-        //     //         user_id: user_id
-        //     //     },
-        //     //     success: function(response) {
-        //     //         if (response.code == 200) {
-        //     //             $(".update-successful").removeClass("d-none");
-        //     //             setTimeout(() => {
-        //     //                 payWithRave(email, amount, phone, scholarship_id, user_id);
-        //     //             }, 3000);
-        //     //         } else if (response.code == 301) {
-        //     //             console.log(response.message);
-        //     //             $(".update-error").removeClass("d-none");
-        //     //             setTimeout(() => {
-        //     //                 locacation.reload();
-        //     //             }, 2000);
-
-        //     //             $(".withdrawal-message").text(
-        //     //                 "You don't have any active investment"
-        //     //             );
-        //     //         }
-        //     //     },
-        //     //     errors: function(error) {
-        //     //         console.log(error.message);
-        //     //     }
-        //     // });
-        // }
+        if ( session == ""  ||  level == ""  ||   term == "" ||  username == "" ||   amount == "" || email == "" || phone == "" ){
+            alert("Please complete your student profile to continue");
+        }else{
+            payWithRave(session,level, term, username, email, phone, amount);
+        } 
+        
     });
 });
-
-function pay(){
-    alert("you clicked me")
-}

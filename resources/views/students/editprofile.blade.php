@@ -80,7 +80,7 @@
                       <div class="tab-content">
                         <div class="tab-pane active" id="home">
 
-                            <form method="post" action="/tutor/editprofile" 
+                            <form method="post" action="/editprofile" 
                             id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
                             {{csrf_field()}}
                             <input type="hidden" name="action" value="basic">
@@ -101,7 +101,7 @@
                               <div class="form-group">
                                 <label for="middle-name" class="control-label col-md-4 col-sm-4 col-xs-12">Email Address</label>
                                 <div class="col-md-8 col-sm-8 col-xs-12">
-                                  <input id="email" class="form-control col-md-7 col-xs-12" disabled="true" type="text" value="{{Auth::user()->email}}" name="email">
+                                  <input id="email" class="form-control col-md-7 col-xs-12" name="email" type="text" value="{{Auth::user()->email}}" name="email">
                                 </div>
                               </div>
                               <div class="form-group">

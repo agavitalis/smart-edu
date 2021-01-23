@@ -30,11 +30,14 @@ class StudentController extends Controller
     {
 
         if ($update->isMethod('POST')) {
+          
             if ($update->action == 'basic') {
+
                 //since we are updating, we done insta
                 $user = User::find(Auth::user()->id);
                 $user->phone = $update->phone;
                 $user->gender = $update->gender;
+                $user->email = $update->email;
 
                 $user->save();
                 return back()->with('success', 'Profile successfully updated');
