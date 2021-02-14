@@ -22,8 +22,6 @@ class StudentRegExcel extends Migration
             $table->string('level')->nullable();
             $table->string('session')->nullable();
             $table->string('term')->nullable();
-            $table->rememberToken();
-            $table->timestamps();
         });
     }
 

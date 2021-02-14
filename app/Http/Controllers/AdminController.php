@@ -19,6 +19,8 @@ use Auth;
 use Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Exports\StudentRegExcelExport;
+use App\Exports\TeacherRegExcelExport;
 
 class AdminController extends Controller
 {
@@ -245,14 +247,8 @@ class AdminController extends Controller
     //here i did download excel from database
 
     public function downloadstudent(Request $request, $type)
-    {
-        // $data=DB::table('studentregistration')->get()->toArray();
-        $data = StudentRegExcel::get()->toArray();
-        return Excel::create('students_reg_details', function ($excel) use ($data) {
-            $excel->sheet('mySheet', function ($sheet) use ($data) {
-                $sheet->fromArray($data);
-            });
-        })->download($type);
+    {       
+        return Excel::download(new StudentRegExcelExport, 'student_upload.xlsx');
     }
 
     
@@ -435,13 +431,7 @@ class AdminController extends Controller
     //here i did download excel from database
     public function downloadteacher(Request $request, $type)
     {
-
-        $data = TeacherRegExcel::get()->toArray();
-        return Excel::create('teachers_reg_details', function ($excel) use ($data) {
-            $excel->sheet('mySheet', function ($sheet) use ($data) {
-                $sheet->fromArray($data);
-            });
-        })->download($type);
+        return Excel::download(new TeacherRegExcelExport, 'teacher_upload.xlsx');
     }
 
     //here I read the excelfile

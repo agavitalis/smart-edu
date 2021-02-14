@@ -33,7 +33,6 @@ class ResultUploadExcel extends Migration
             $table->string('subject_teacher')->default(0);
             $table->string('teacher_username')->default(0);
     
-            $table->timestamps();
         });
     }
 
