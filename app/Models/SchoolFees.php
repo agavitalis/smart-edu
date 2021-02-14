@@ -10,6 +10,6 @@ class SchoolFees extends Model
     use HasFactory;
 
     protected $fillable = [
-        'amount', 'session', 'level','term'
+        'amount', 'session', 'level','term','allow_part_payment'
     ];
 }

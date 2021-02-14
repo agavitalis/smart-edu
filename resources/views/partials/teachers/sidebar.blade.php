@@ -30,8 +30,8 @@
                   <li><a href="/tutor/generalclasslist"><i class="fa fa-print"></i>Print Class List</a></li>
                 </ul>
               </div>
-              
-                           
+
+
 
             </div>
             <!-- /sidebar menu -->

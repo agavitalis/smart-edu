@@ -19,6 +19,8 @@ class CreateSchoolFeesTable extends Migration
             $table->string('session');
             $table->string('level');
             $table->string('term');
+            $table->boolean('allow_part_payment')->default(false);
+            
             $table->timestamps();
         });
     }

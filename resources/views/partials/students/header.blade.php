@@ -61,7 +61,7 @@
               <a data-toggle="tooltip" data-placement="top" title="Lock">
                 <span class="fa fa-cog" aria-hidden="true"></span>
               </a>
-              <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+              <a data-toggle="tooltip" data-placement="top" title="Logout" href="#">
                 <span class="fa fa-sign-out" aria-hidden="true"></span>
               </a>
             </div>

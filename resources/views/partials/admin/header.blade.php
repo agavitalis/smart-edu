@@ -35,7 +35,7 @@
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="index.html" class="site_title"><i class="fa fa-graduation-cap"></i> <span>Smartest Kid Solution</span></a>
+              <a href="/" class="site_title"><i class="fa fa-graduation-cap"></i> <span>Smartest Kid Solution</span></a>
             </div>
 
             <div class="clearfix"></div>
@@ -67,7 +67,7 @@
               <a data-toggle="tooltip" data-placement="top" title="Lock">
                 <span class="fa fa-cog" aria-hidden="true"></span>
               </a>
-              <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+              <a data-toggle="tooltip" data-placement="top" title="Logout" href="#">
                 <span class="fa fa-sign-out" aria-hidden="true"></span>
               </a>
             </div>

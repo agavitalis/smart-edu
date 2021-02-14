@@ -32,6 +32,6 @@ class Assignclass extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('assignclasses');
     }
 }

@@ -52,7 +52,7 @@
                             <thead>
                                 <tr>
                                     <th>Amount(NGN)</th>
-                                   
+
                                     <th>Level</th>
                                     <th>Session</th>
                                     <th>Term</th>
@@ -60,7 +60,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach($fees as $fee )
+                                @foreach($fees as $fee )
                                 <tr>
                                     <td>
                                         <a>{{$fee->amount}}</a>
@@ -74,7 +74,7 @@
                                     <td>
                                         <a>{{$fee->term}}</a>
                                     </td>
-                                   
+
                                     <td>
                                         <form action="/admin/delete_school_fees" method="post">
                                             {{csrf_field()}}
@@ -88,7 +88,7 @@
 
                                 </tr>
                                 @endforeach
-                                
+
                             </tbody>
                         </table>
                         <!-- end project list -->
@@ -111,20 +111,21 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        <br/>
-                        <form class="form-horizontal form-label-left input_mask" action="/admin/set_school_fees" method="post">
+                        <br />
+                        <form class="form-horizontal form-label-left input_mask" action="/admin/set_school_fees"
+                            method="post">
                             {{csrf_field()}}
-                           
+
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">School Fees Amount(NGN) <span
                                         class="required">*</span>
                                 </label>
                                 <div class="col-md-9 col-sm-9 col-xs-12">
-                                    <input class="date-picker form-control col-md-7 col-xs-12" required
-                                        type="text" name="amount" placeholder="Eg: 7000">
+                                    <input class="date-picker form-control col-md-7 col-xs-12" required type="text"
+                                        name="amount" placeholder="Eg: 7000">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Level <span
                                         class="required">*</span>
@@ -164,6 +165,22 @@
                                         <option value="2">2nd Term</option>
                                         <option value="3">3rd Term</option>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Allow Part Payment<span
+                                        class="required">*</span></label>
+                                <div class="col-md-8  col-xs-12">
+                                    <div id="part_payment" class="btn-group" data-toggle="buttons">
+                                        <label class="btn btn-primary" data-toggle-class="btn-primary"
+                                            data-toggle-passive-class="btn-primary">
+                                            <input type="radio" name="part_payment" value="1" required> &nbsp; Yes &nbsp;
+                                        </label>
+                                        <label class="btn btn-primary" data-toggle-class="btn-primary"
+                                            data-toggle-passive-class="btn-primary">
+                                            <input type="radio" name="part_payment" value="0" required> &nbsp; No &nbsp;
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="ln_solid"></div>

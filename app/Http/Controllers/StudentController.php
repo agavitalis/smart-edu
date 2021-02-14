@@ -121,10 +121,11 @@ class StudentController extends Controller
 
                     return view('students.results', compact('results', 'positions'));
 
-                } else if ($getpin->used_by == Auth::user()->username) {
+                } else if ($getpin->used_by == Auth::user()->username) {                  
                     if ($getpin->session != $check->session || $getpin->term != $check->term) {
                         return back()->with('error', 'You can"t use same pin for different terms or sessions');
                     } else {
+                        
                         //now get his results
                         $results = DB::table('results')->where(['term' => $check->term,
                             'session' => $check->session, 'username' => Auth::user()->username, 'approved' => 1])->get();
@@ -132,8 +133,7 @@ class StudentController extends Controller
                         //now get his class performance
                         $positions = DB::table('positions')->where(['term' => $check->term,
                             'session' => $check->session, 'username' => Auth::user()->username])->first();
-                        //dd($positions);
-
+                        
                         if ($positions == null) {
                             return back()->with('error', 'Selected results not yet ready');
                         }
