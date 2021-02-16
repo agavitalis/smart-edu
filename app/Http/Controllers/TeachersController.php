@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ResultUploadExcelExport;
 use App\Models\Position;
 use App\Models\Result;
-use App\Models\ResultUploadExcel;
 use App\Models\User;
 use Auth;
 use Excel;
@@ -243,13 +243,7 @@ class TeachersController extends Controller
     //download result sheet
     public function resultsheet(Request $request, $type)
     {
-        // $data=DB::table('studentregistration')->get()->toArray();
-        $data = resultuploadexcel::get()->toArray();
-        return Excel::create('result_sheet', function ($excel) use ($data) {
-            $excel->sheet('mySheet', function ($sheet) use ($data) {
-                $sheet->fromArray($data);
-            });
-        })->download($type);
+        return Excel::download(new ResultUploadExcelExport, 'result_sheet_sample.xlsx');
     }
 
     // /here I read the excelfile
@@ -275,7 +269,7 @@ class TeachersController extends Controller
 
                 //check if its any an empty sheet
                 if (!$data->count()) {
-                    return back()->with('error', 'you cannot opload an empty scheet');
+                    return back()->with('error', 'you cannot opload an empty s heet');
                 } elseif ($data->count()) {
                     //check if he actually uploaded his course and class
                     foreach ($data as $key => $upload) {

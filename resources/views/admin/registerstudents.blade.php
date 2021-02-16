@@ -169,14 +169,12 @@
                         <div class="container">
                             <div class="panel panel-primary">
                                 <div class="panel-body">
-                                    <h3>Download sample Excel file to register students:</h3>
+                                    <h3>Sample Upload File:</h3>
                                     <div style="border: 2px solid #a1a1a1;margin-top: 15px;padding: 20px;">
-                                        <a href="{{ url('downloadstudent/xls') }}"><button
-                                                class="btn btn-info ">Download Excel xls</button></a>
+
                                         <a href="{{ url('downloadstudent/xlsx') }}"><button
-                                                class="btn btn-info ">Download Excel xlsx</button></a>
-                                        <a href="{{ url('downloadstudent/csv') }}"><button
-                                                class="btn btn-info ">Download CSV</button></a>
+                                                class="btn btn-info btn-block">Download Sample Upload File</button></a>
+
                                     </div>
 
                                     <h3>Upload Excel File:</h3>
@@ -184,15 +182,20 @@
                                         action="{{ URL::to('importStudent') }}" class="form-horizontal" method="post"
                                         enctype="multipart/form-data">
                                         {{ csrf_field() }}
-                                        <input class='btn btn-success' type="file" name="import_file" />
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <input type="file" name="import_file" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <button class="btn btn-primary">Upload Students List to
+                                                    Database</button>
 
-                                        <br />
+                                            </div>
 
-                                        <button class="btn btn-primary">Upload Students List to Database</button>
+                                        </div>
 
                                     </form>
                                     <br />
-
 
                                 </div>
                             </div>

@@ -21,6 +21,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Exports\StudentRegExcelExport;
 use App\Exports\TeacherRegExcelExport;
+use App\Imports\StudentImport;
+use App\Imports\TeacherImport;
 
 class AdminController extends Controller
 {
@@ -245,45 +247,38 @@ class AdminController extends Controller
     }
 
     //here i did download excel from database
-
     public function downloadstudent(Request $request, $type)
     {       
         return Excel::download(new StudentRegExcelExport, 'student_upload.xlsx');
     }
-
     
     public function importstudent(Request $request)
     {
 
         if ($request->hasFile('import_file')) {
-
-            $path = $request->file('import_file')->getRealPath();
-            $data = Excel::load($path)->get();
+           
+            $data = (new StudentImport)->toCollection(request()->file('import_file'));
 
             if ($data->count()) {
 
-                foreach ($data as $key => $value) {
+                foreach ($data[0] as $student) {
 
-                    $user[] = ['name' => $value->name, 'username' => $value->username,
-                        'gender' => $value->gender, 'class' => $value->class, 'level' => $value->level,
-                        'session' => $value->session, 'term' => $value->term,
-                        'password' => bcrypt("student101"), 'UserType' => "student"];
+                    User::create(['name' => $student['name'],'UserType' => "student" ,'username' =>$student['username'],
+                        'gender' => $student['gender'], 'class' => $student['class'], 'level' =>$student['level'],
+                        'session' => $student['session'], 'term' => $student['term'],
+                        'password' => bcrypt("student101")]);
 
-                    $student[] = ['name' => $value->name, 'username' => $value->username,
-                        'gender' => $value->gender, 'class' => $value->class, 'level' => $value->level,
-                        'session' => $value->session, 'term' => $value->term,
-                    ];
-
-                }
-
-                if (!empty($user)) {
-
-                    DB::table('users')->insert($user);
-                    DB::table('students')->insert($student);
-                    return back()->with('success', 'Insert Record successfully.');
+                    Student::create(['name' =>$student['name'], 'username' =>$student['username'],
+                        'gender' => $student['gender'], 'class' => $student['class'], 'level' =>$student['level'],
+                        'session' => $student['session'], 'term' => $student['term'],
+                    ]);
 
                 }
+               
+                return back()->with('success', 'Insert Record successfully.');
+                
             }
+
         }
         return back()->with('error', 'Please Check your file, Something is wrong there.');
     }
@@ -395,7 +390,6 @@ class AdminController extends Controller
     }
 
     //teachers
-
     public function registerteachers(Request $request)
     {
 
@@ -439,28 +433,28 @@ class AdminController extends Controller
     {
 
         if ($request->hasFile('import_file')) {
-            $path = $request->file('import_file')->getRealPath();
-            $data = Excel::load($path)->get();
+            
+            $data = (new TeacherImport)->toCollection(request()->file('import_file'));
+
             if ($data->count()) {
-                foreach ($data as $key => $value) {
-                    $user[] = ['name' => $value->name, 'username' => $value->username,
-                        'gender' => $value->gender,
-                        'password' => bcrypt("teacher101"), 'UserType' => "teacher"];
-
-                    $teacher[] = ['name' => $value->name, 'username' => $value->username];
-
+    
+                foreach ($data[0] as $teacher) {
+    
+                    User::create(['name' => $teacher['name'], 'username' => $teacher['username'],
+                    'gender' => $teacher['gender'],
+                    'password' => bcrypt("teacher101"), 'UserType' => "teacher"]);
+    
+                    Teacher::create(['name' =>$teacher['name'], 'username' =>$teacher['username'] ]);
+    
                 }
-
-                // 'name','username','gender','class','level','session','term'
-                if (!empty($user)) {
-                    DB::table('users')->insert($user);
-                    DB::table('teachers')->insert($teacher);
-                    //dd('Insert Record successfully.');
-                    return back()->with('success', 'Teachers successfully created.');
-                }
+               
+                return back()->with('success', 'Insert Record successfully.');
+                
             }
+           
         }
         return back()->with('error', 'Please Check your file, Something is wrong there.');
+
     }
 
     public function manageteachers(Request $request)
