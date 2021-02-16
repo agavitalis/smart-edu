@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\ResultUploadExcelExport;
 use App\Models\Position;
 use App\Models\Result;
 use App\Models\User;
@@ -10,6 +9,8 @@ use Auth;
 use Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Exports\ResultUploadExcelExport;
+use App\Imports\ResultImport;
 
 class TeachersController extends Controller
 {
@@ -264,24 +265,29 @@ class TeachersController extends Controller
         if ($request->isMethod('POST')) {
 
             if ($request->hasFile('import_file')) {
-                $path = $request->file('import_file')->getRealPath();
-                $data = Excel::load($path)->get();
+
+                $data = (new ResultImport)->toCollection(request()->file('import_file'));
 
                 //check if its any an empty sheet
                 if (!$data->count()) {
                     return back()->with('error', 'you cannot opload an empty s heet');
                 } elseif ($data->count()) {
+
                     //check if he actually uploaded his course and class
-                    foreach ($data as $key => $upload) {
-                        if (($upload->class != $request->klass || $upload->subject != $request->subject) || ($upload->term != $request->term || $upload->session != $request->session)) {
+                    foreach ($data[0] as $student) {
+
+                        if (($student['class'] != $request->klass || $student['subject'] != $request->subject)
+                         || ($student['term'] != $request->term || $student['session'] != $request->session)) {
                             return back()->with("error", "Cross Check Your File, your inputs doesn't match your selections");
                         }
+    
                     }
 
                     //check if that result have been in the database before
-                    foreach ($data as $key => $upload) {
+                    foreach ($data[0] as $student) {
+                   
                         $check = DB::table('results')
-                            ->where(['username' => $upload->regno, 'session' => $upload->session, 'subject' => $upload->subject, 'term' => $upload->term])->count();
+                            ->where(['username' => $student['regno'], 'session' => $student['session'], 'subject' => $student['subject'], 'term' => $student['term'] ])->count();
 
                         if ($check > 0) {
                             return back()->with("error", "Some of these records, already exist in the database");
@@ -290,25 +296,25 @@ class TeachersController extends Controller
                     }
 
                     //now upload the result is clean
-                    foreach ($data as $key => $upload) {
-
+                   
+                    foreach ($data[0] as $student) {
                         //  dd($upload->name);
                         $result = new Result();
 
-                        $result->name = $upload->name;
-                        $result->username = $upload->regno;
+                        $result->name = $student['name'];
+                        $result->username = $student['regno'];
 
-                        $result->class = $upload->class;
-                        $result->term = $upload->term;
-                        $result->level = $upload->level;
-                        $result->session = $upload->session;
+                        $result->class = $student['class'];
+                        $result->term = $student['term'];
+                        $result->level = $student['level'];
+                        $result->session = $student['session'];
 
-                        $result->subject = $upload->subject;
+                        $result->subject = $student['subject'];
 
-                        $result->continous_accessment = $upload->continous_accessment;
-                        $result->test = $upload->test;
-                        $result->exam = $upload->exam;
-                        $result->total = $upload->continous_accessment + $upload->test + $upload->exam;
+                        $result->continous_accessment = $student['continous_accessment'];
+                        $result->test = $student['test'];
+                        $result->exam = $student['exam'];
+                        $result->total = $student['continous_accessment'] + $student['test'] + $student['exam'];
 
                         if ($result->total >= 70) {
                             $result->grade = "A";
@@ -334,8 +340,8 @@ class TeachersController extends Controller
 
                     //select all that I just uploaded
                     $subjectgrade = DB::table('results')->where([
-                        'class' => $upload->class, 'term' => $upload->term, 'level' => $upload->level,
-                        'session' => $upload->session, 'subject' => $upload->subject])->orderBy('total', 'DESC')->get();
+                        'class' => $request->klass, 'term' => $request->term,
+                        'session' => $request->session, 'subject' => $request->subject])->orderBy('total', 'DESC')->get();
 
                     $counter = 1;
                     $last_total = null;
