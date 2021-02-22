@@ -21,7 +21,7 @@ class CreateSchoolFeeInvoicesTable extends Migration
             $table->string('term');
             $table->string('amount')->nullable();
             $table->string('amount_paid')->nullable();
-            $table->string('status')->default("NOT PAID");
+            $table->enum('status', ['NOT PAID', 'PARTLY PAID', 'PAID']);
             $table->bigInteger('user_id');
             $table->timestamps();
         });

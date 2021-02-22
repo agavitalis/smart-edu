@@ -43,4 +43,26 @@ class SchoolFeesController extends Controller
         }
 
     }
+
+    public function school_fees_reports(Request $request){
+
+        $session = $request->session;
+        $level = $request->level;
+        $term = $request->term;
+
+        if($level == null && $term == null){
+            $reports = SchoolFeeInvoice::where(['session'=>$session, 'status'=>$request->status])->get();
+            return view('students.school_fees_lists',compact('reports'));
+        }else if($level == null && $term != null){
+            $reports = SchoolFeeInvoice::where(['session'=>$session,'term'=>$term, 'status'=>$request->status])->get();
+            return view('students.school_fees_lists',compact('school_fees_recipts'));
+        }else if ($level != null && $term == null) {
+            $reports = SchoolFeeInvoice::where(['session'=>$session,'level'=>$level, 'status'=>$request->status])->get();
+            return view('students.school_fees_lists',compact('school_fees_recipts'));
+        }else {
+            $reports = SchoolFeeInvoice::where(['session'=>$session,'term'=>$term, 'level'=>$level, 'status'=>$request->status])->get();
+            return view('students.school_fees_lists',compact('school_fees_recipts'));
+        }
+
+    }
 }
