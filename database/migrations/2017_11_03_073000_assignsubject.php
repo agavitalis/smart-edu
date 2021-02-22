@@ -13,7 +13,7 @@ class Assignsubject extends Migration
      */
     public function up()
     {
-       Schema::create('assignsubjects', function (Blueprint $table) {
+       Schema::create('assign_subjects', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('class')->nullable();
@@ -34,6 +34,6 @@ class Assignsubject extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('assignsubjects');
+        Schema::dropIfExists('assign_subjects');
     }
 }

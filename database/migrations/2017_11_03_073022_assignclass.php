@@ -13,7 +13,7 @@ class Assignclass extends Migration
      */
     public function up()
     {
-        Schema::create('assignclasses', function (Blueprint $table) {
+        Schema::create('assign_classes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->nullable();
             $table->string('level')->nullable();
@@ -32,6 +32,6 @@ class Assignclass extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('assignclasses');
+        Schema::dropIfExists('assign_classes');
     }
 }

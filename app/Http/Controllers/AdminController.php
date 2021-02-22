@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\StudentRegExcelExport;
+use App\Exports\TeacherRegExcelExport;
+use App\Imports\StudentImport;
+use App\Imports\TeacherImport;
 use App\Models\AssignClass;
 use App\Models\AssignSubject;
 use App\Models\Klass;
@@ -9,20 +13,14 @@ use App\Models\Level;
 use App\Models\Result;
 use App\Models\Session;
 use App\Models\Student;
-use App\Models\StudentRegExcel;
 use App\Models\Subject;
 use App\Models\Teacher;
-use App\Models\TeacherRegExcel;
 use App\Models\Term;
 use App\Models\User;
 use Auth;
 use Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Exports\StudentRegExcelExport;
-use App\Exports\TeacherRegExcelExport;
-use App\Imports\StudentImport;
-use App\Imports\TeacherImport;
 
 class AdminController extends Controller
 {
@@ -211,9 +209,9 @@ class AdminController extends Controller
         } elseif ($request->isMethod('POST')) {
 
             //check for dupliate entry
-            $student = User::where(['username'=>$request->username])->first();
-            if($student != null){
-                return back()->with('error','Duplicate Reg Number/Username');
+            $student = User::where(['username' => $request->username])->first();
+            if ($student != null) {
+                return back()->with('error', 'Duplicate Reg Number/Username');
             }
             //since we are creating a new guy now
             $student = new User();
@@ -248,35 +246,35 @@ class AdminController extends Controller
 
     //here i did download excel from database
     public function downloadstudent(Request $request, $type)
-    {       
+    {
         return Excel::download(new StudentRegExcelExport, 'student_upload.xlsx');
     }
-    
+
     public function importstudent(Request $request)
     {
 
         if ($request->hasFile('import_file')) {
-           
+
             $data = (new StudentImport)->toCollection(request()->file('import_file'));
 
             if ($data->count()) {
 
                 foreach ($data[0] as $student) {
 
-                    User::create(['name' => $student['name'],'UserType' => "student" ,'username' =>$student['username'],
-                        'gender' => $student['gender'], 'class' => $student['class'], 'level' =>$student['level'],
+                    User::create(['name' => $student['name'], 'UserType' => "student", 'username' => $student['username'],
+                        'gender' => $student['gender'], 'class' => $student['class'], 'level' => $student['level'],
                         'session' => $student['session'], 'term' => $student['term'],
                         'password' => bcrypt("student101")]);
 
-                    Student::create(['name' =>$student['name'], 'username' =>$student['username'],
-                        'gender' => $student['gender'], 'class' => $student['class'], 'level' =>$student['level'],
+                    Student::create(['name' => $student['name'], 'username' => $student['username'],
+                        'gender' => $student['gender'], 'class' => $student['class'], 'level' => $student['level'],
                         'session' => $student['session'], 'term' => $student['term'],
                     ]);
 
                 }
-               
+
                 return back()->with('success', 'Insert Record successfully.');
-                
+
             }
 
         }
@@ -433,25 +431,25 @@ class AdminController extends Controller
     {
 
         if ($request->hasFile('import_file')) {
-            
+
             $data = (new TeacherImport)->toCollection(request()->file('import_file'));
 
             if ($data->count()) {
-    
+
                 foreach ($data[0] as $teacher) {
-    
+
                     User::create(['name' => $teacher['name'], 'username' => $teacher['username'],
-                    'gender' => $teacher['gender'],
-                    'password' => bcrypt("teacher101"), 'UserType' => "teacher"]);
-    
-                    Teacher::create(['name' =>$teacher['name'], 'username' =>$teacher['username'] ]);
-    
+                        'gender' => $teacher['gender'],
+                        'password' => bcrypt("teacher101"), 'UserType' => "teacher"]);
+
+                    Teacher::create(['name' => $teacher['name'], 'username' => $teacher['username']]);
+
                 }
-               
+
                 return back()->with('success', 'Insert Record successfully.');
-                
+
             }
-           
+
         }
         return back()->with('error', 'Please Check your file, Something is wrong there.');
 
@@ -553,7 +551,7 @@ class AdminController extends Controller
             $klasses = DB::table('klasses')->get();
             $terms = DB::table('terms')->get();
             $subjects = DB::table('subjects')->get();
-            $assignedsubjects = DB::table('assignsubjects')->get();
+            $assignedsubjects = DB::table('assign_subjects')->get();
             $teachers = DB::table('teachers')->get();
 
             return view('admin.assignsubject', compact('sessions', 'levels', 'klasses', 'terms', 'assignedsubjects', 'subjects', 'teachers'));
@@ -565,7 +563,7 @@ class AdminController extends Controller
                     return back()->with('error', 'Select all fields sir');
                 }
 
-                $subject = new assignsubject();
+                $subject = new AssignSubject();
 
                 $subject->session = $request->session;
                 $subject->level = $request->level;
@@ -579,7 +577,7 @@ class AdminController extends Controller
 
                 return back()->with('success', 'subject successfully assigned');
             } elseif ($request->action == 'delete') {
-                $delete = assignsubject::find($request->id);
+                $delete = AssignSubject::find($request->id);
 
                 $delete->delete();
                 return back()->with('success', 'subject successfully deleted');
@@ -597,7 +595,7 @@ class AdminController extends Controller
             $levels = DB::table('levels')->get();
             $klasses = DB::table('klasses')->get();
             $terms = DB::table('terms')->get();
-            $assignedclasses = DB::table('assignclasses')->get();
+            $assignedclasses = DB::table('assign_classes')->get();
             $teachers = DB::table('teachers')->get();
 
             return view('admin.assignclass', compact('sessions', 'levels', 'klasses', 'terms', 'assignedclasses', 'teachers'));
@@ -610,7 +608,7 @@ class AdminController extends Controller
                 }
 
                 //check if this class have been assigned before
-                $check = DB::table('assignclasses')->where([
+                $check = DB::table('assign_classes')->where([
                     'name' => $request->klass, 'level' => $request->level, 'term' => $request->term,
                     'session' => $request->session])->get();
                 // dd($check);
@@ -618,7 +616,7 @@ class AdminController extends Controller
                     return back()->with('error', 'This class has already been assigned');
                 }
 
-                $klass = new assignclass();
+                $klass = new AssignClass();
                 $klass->session = $request->session;
                 $klass->level = $request->level;
                 $klass->name = $request->klass;
@@ -630,7 +628,7 @@ class AdminController extends Controller
 
                 return back()->with('success', 'subject successfully assigned');
             } elseif ($request->action == 'delete') {
-                $delete = assignclass::find($request->id);
+                $delete = AssignClass::find($request->id);
 
                 $delete->delete();
                 return back()->with('success', 'Teacher Deleted Successfully deleted');
@@ -656,11 +654,16 @@ class AdminController extends Controller
                 return view('admin.givestudentsclasses', compact('users', 'levels', 'klasses'));
             } elseif ($request->action == 'giveclass') {
 
-                $emeka = $request->klass;
+                $student_level = $request->klass;
+                if($request->student == null){
+
+                    return back()->with('error', "Please select at least one student to proceed");
+
+                };
                 foreach ($request->student as $id) {
 
                     $student = user::find($id);
-                    $student->class = $emeka;
+                    $student->class = $student_level;
                     $student->save();
 
                 }
@@ -689,11 +692,18 @@ class AdminController extends Controller
                 return view('admin.givestudentslevel', compact('users', 'levels', 'klasses'));
             } elseif ($request->action == 'givelevel') {
 
-                $emeka = $request->level;
+                $student_level = $request->level;
+
+                if($request->student == null){
+
+                    return back()->with('error', "Please select at least one student to proceed");
+
+                };
+
                 foreach ($request->student as $id) {
 
                     $student = user::find($id);
-                    $student->level = $emeka;
+                    $student->level = $student_level;
                     $student->save();
 
                 }
