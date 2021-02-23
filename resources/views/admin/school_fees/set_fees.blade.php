@@ -56,6 +56,7 @@
                                     <th>Level</th>
                                     <th>Session</th>
                                     <th>Term</th>
+                                    <th>Allow Part Payment</th>
                                     <th style="width: 20%">#Delete</th>
                                 </tr>
                             </thead>
@@ -73,6 +74,9 @@
                                     </td>
                                     <td>
                                         <a>{{$fee->term}}</a>
+                                    </td>
+                                    <td>
+                                        <a>{{$fee->allow_part_payment}}</a>
                                     </td>
 
                                     <td>

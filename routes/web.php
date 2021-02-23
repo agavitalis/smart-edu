@@ -122,6 +122,7 @@ Route::get('admin/assignment','AdminController@assignment')->name('assignment');
 Route::group(['prefix' => 'admin','namespace'=>"Admin"], function() {
 
 	Route::match(['GET','POST'],'/set_school_fees','SchoolFeesController@set_fees')->name('admin_set_fees');
+	Route::match(['GET','POST'],'/school_fees_logs','SchoolFeesController@school_fees_reports')->name('school_fees_logs');
 	Route::match(['POST'],'/delete_school_fees','SchoolFeesController@delete_fees')->name('admin_delete_fees');
 
 });

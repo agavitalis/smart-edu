@@ -58,42 +58,50 @@
                                 <tr>
                                     <th>Student Name</th>
                                     <th>Reg No</th>
-                                    <th>Current Level</th>
                                     <th>Current Class</th>
-                                    <th>Current Session</th>
+                                    <th> Level</th>
+                                   
+                                    <th> Session</th>
+                                    <th>Amount</th>
                                     <th>Amount Paid</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($users as $user )
+                            @if(isset($reports))
+                                @foreach($reports as $user )
                                 <tr>
                                     <td>
-                                        <a>{{$user->name}}</a>
+                                        <a>{{$user->user->name}}</a>
                                     </td>
                                     <td>
-                                        <a>{{$user->username}}</a>
+                                        <a>{{$user->user->username}}</a>
+                                    </td>
+                                    <td>
+                                        <a>{{$user->user->class}}</a>
                                     </td>
                                     <td>
                                         <a>{{$user->level}}</a>
                                     </td>
-                                    <td>
-                                        <a>{{$user->class}}</a>
-                                    </td>
+                                    
                                     <td>
                                         <a>{{$user->session}}</a>
                                     </td>
                                     <td>
-                                        <a>0000</a>
+                                        <a>{{$user->amount}}</a>
                                     </td>
                                     <td>
-                                        <a>0000</a>
+                                        <a>{{$user->amount_paid}}</a>
+                                    </td>
+                                    <td>
+                                        <a>{{$user->status}}</a>
                                     </td>
 
 
 
                                 </tr>
                                 @endforeach
+                            @endif
                             </tbody>
                         </table>
                     </div>
@@ -116,15 +124,15 @@
                     </div>
                     <div class="x_content">
                         <br />
-                        <form class="form-horizontal form-label-left input_mask" action="/admin/printstudents"
+                        <form class="form-horizontal form-label-left input_mask" action="/admin/school_fees_logs"
                             method="post">
                             {{csrf_field()}}
-                            <input type="hidden" name="action" value="level">
+                         
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Session<span
                                         class="required">*</span></label>
                                 <div class="col-md-8 col-sm-6 col-xs-12">
-                                    <select class="form-control" required="" name="level">
+                                    <select class="form-control" required="" name="session">
                                         <option disabled="" selected="">Select Session</option>
                                         @foreach($sessions as $session)
                                         <option value="{{$session->name}}">{{$session->name}}</option>
@@ -134,11 +142,10 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Level<span
-                                        class="required">*</span></label>
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Level</label>
                                 <div class="col-md-8 col-sm-6 col-xs-12">
-                                    <select class="form-control" required="" name="level">
-                                        <option disabled="" selected="">Select level</option>
+                                    <select class="form-control" name="level">
+                                        <option disabled selected value="">Select level</option>
                                         @foreach($levels as $level)
                                         <option value="{{$level->name}}">{{$level->name}}</option>
 
@@ -147,15 +154,28 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Class<span
-                                        class="required">*</span></label>
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Term</label>
                                 <div class="col-md-8 col-sm-6 col-xs-12">
-                                    <select class="form-control" required="" name="klass">
-                                        <option disabled="" selected="">Select Class</option>
-                                        @foreach($klasses as $klass)
-                                        <option value="{{$klass->name}}">{{$klass->name}}</option>
+                                    <select class="form-control" name="term">
+                                        <option disabled selected value="">Select Term</option>
+                                        @foreach($terms as $term)
+                                        <option value="{{$term->name}}">{{$term->name}}</option>
 
                                         @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Payment Status <span
+                                        class="required">*</span>
+                                </label>
+                                <div class="col-md-8 col-sm-6 col-xs-12">
+                                    <select class="form-control" required name="status">
+                                        <option value="" selected>Select Status</option>
+                                        <option value="PAID">PAID</option>
+                                        <option value="PARTLY PAID">PARTLY PAID</option>
+                                        <option value="NOT PAID">NOT PAID</option>
+                                       
                                     </select>
                                 </div>
                             </div>
@@ -165,7 +185,7 @@
                                 <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
 
                                     <button class="btn btn-primary" type="reset">Reset</button>
-                                    <button type="submit" class="btn btn-success">Show Students</button>
+                                    <button type="submit" class="btn btn-success">Fetch Logs</button>
                                 </div>
                             </div>
 

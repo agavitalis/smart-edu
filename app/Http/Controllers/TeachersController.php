@@ -23,8 +23,8 @@ class TeachersController extends Controller
     public function teacherdashboard()
     {
         //gem me the list of admin, students and teachers
-        $myclasses = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->count();
-        $mysubjects = DB::table('assignsubjects')->where('teacher_name', Auth::user()->name)->count();
+        $myclasses = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->count();
+        $mysubjects = DB::table('assign_subjects')->where('teacher_name', Auth::user()->name)->count();
         $myresults = DB::table('results')->where('subject_teacher', Auth::user()->name)->count();
         // $subjects=DB::table('subjects')->count();
         //dd($students);
@@ -83,7 +83,7 @@ class TeachersController extends Controller
 
     public function mysubjects()
     {
-        $mysubjects = DB::table('assignsubjects')->where('teacher_name', Auth::user()->name)->get();
+        $mysubjects = DB::table('assign_subjects')->where('teacher_name', Auth::user()->name)->get();
         return view('teachers.mysubjects', compact('mysubjects'));
     }
 
@@ -117,7 +117,7 @@ class TeachersController extends Controller
     public function deletesubresult(Request $request)
     {
         if ($request->isMethod('GET')) {
-            $check = DB::table('assignsubjects')->where('teacher_name', Auth::user()->name)->count();
+            $check = DB::table('assign_subjects')->where('teacher_name', Auth::user()->name)->count();
             //that is if he doesnt have any class assigned
             if ($check < 1) {
                 return back()->with('error', 'You have no subjects assigned to you');
@@ -126,7 +126,7 @@ class TeachersController extends Controller
 
             $sessions = DB::table('sessions')->get();
             $terms = DB::table('terms')->get();
-            $subjects = DB::table('assignsubjects')->where('teacher_name', Auth::user()->name)->get();
+            $subjects = DB::table('assign_subjects')->where('teacher_name', Auth::user()->name)->get();
             $results = DB::table('results')->where(['subject_teacher' => Auth::user()->name, 'approved' => 0])->limit(50)->get();
             return view('teachers.deletesubresult', compact('klasses', 'sessions', 'terms', 'results', 'subjects'));
         } elseif ($request->isMethod('POST')) {
@@ -157,20 +157,20 @@ class TeachersController extends Controller
     public function myclasses(Request $request)
     {
         if ($request->isMethod('GET')) {
-            $check = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->count();
+            $check = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->count();
             //that is if he doesnt have any class assigned
             if ($check < 1) {
                 return back()->with('error', 'You have no classes assigned to you');
             }
-            $klasses = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->get();
-            $first = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->first();
+            $klasses = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->get();
+            $first = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->first();
 
             $users = DB::table('users')->where('class', $first->name)->get();
             $terms = DB::table('terms')->get();
             return view('teachers.myclasses', compact('klasses', 'users', 'terms'));
         } elseif ($request->isMethod('POST')) {
-            $klasses = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->get();
-            //$first=DB::table('assignclasses')->where('teacher_name',Auth::user()->name)->first();
+            $klasses = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->get();
+            //$first=DB::table('assign_classes')->where('teacher_name',Auth::user()->name)->first();
             $terms = DB::table('terms')->get();
             $users = DB::table('users')->where([
                 'class' => $request->klass, 'term' => $request->term])->get();
@@ -183,18 +183,18 @@ class TeachersController extends Controller
     {
         if ($request->isMethod('GET')) {
             //check if I was assigned a class
-            $check = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->count();
+            $check = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->count();
             //that is if he doesnt have any class assigned
             if ($check < 1) {
                 return back()->with('error', 'You have no classes assigned to you');
             }
             //get my first assigned class
-            $first = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->first();
+            $first = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->first();
             //show him all first, then he chooses
             $results = DB::table('results')->where('class', $first->name)->get();
 
             //select sessions
-            $klasses = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->get();
+            $klasses = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->get();
             $levels = DB::table('levels')->get();
 
             $sessions = DB::table('sessions')->get();
@@ -211,7 +211,7 @@ class TeachersController extends Controller
             // dd($results);
 
             //select sessions
-            $klasses = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->get();
+            $klasses = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->get();
             $levels = DB::table('levels')->get();
 
             $sessions = DB::table('sessions')->get();
@@ -233,7 +233,7 @@ class TeachersController extends Controller
             return view('teachers.generalclasslist', compact('klasses', 'users'));
         } elseif ($request->isMethod('POST')) {
             $klasses = DB::table('klasses')->get();
-            //$first=DB::table('assignclasses')->where('teacher_name',Auth::user()->name)->first();
+            //$first=DB::table('assign_classes')->where('teacher_name',Auth::user()->name)->first();
             $users = DB::table('users')->where([
                 'class' => $request->klass])->get();
 
@@ -253,7 +253,7 @@ class TeachersController extends Controller
         if ($request->isMethod('GET')) {
 
             //select shbjects where he is the coordinator and all the classes
-            $subjects = DB::table('assignsubjects')->where(['teacher_name' => Auth::user()->name, 'is_coordinator' => 1])->get();
+            $subjects = DB::table('assign_subjects')->where(['teacher_name' => Auth::user()->name, 'is_coordinator' => 1])->get();
 
             $klasses = DB::table('klasses')->get();
             $terms = DB::table('terms')->get();
@@ -385,15 +385,15 @@ class TeachersController extends Controller
     {
         if ($request->isMethod('GET')) {
             //check if I was assigned a class
-            $check = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->count();
+            $check = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->count();
             //that is if he doesnt have any class assigned
             if ($check < 1) {
                 return back()->with('error', 'You have no classes assigned to you');
             }
             //select the teacher class
-            $klass = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->first();
+            $klass = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->first();
             //select the teacher classes
-            $klasses = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->get();
+            $klasses = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->get();
             //get the current term
             $term = DB::table('terms')->where('current', 1)->first();
             //get the current session
@@ -417,7 +417,7 @@ class TeachersController extends Controller
                 }
 
                 //select the teacher classes
-                $klasses = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->get();
+                $klasses = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->get();
 
                 //get me all the term and session incase arecalculation is needed
                 $terms = DB::table('terms')->get();
@@ -533,13 +533,13 @@ class TeachersController extends Controller
     {
         if ($request->isMethod('GET')) {
             //check if I was assigned a class
-            $check = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->count();
+            $check = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->count();
             //that is if he doesnt have any class assigned
             if ($check < 1) {
                 return back()->with('error', 'You have no classes assigned to you');
             }
             //get my first assigned class
-            $first = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->first();
+            $first = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->first();
 
             //get my current session
             $session = DB::table('sessions')->where('current', 1)->first();
@@ -550,7 +550,7 @@ class TeachersController extends Controller
             $results = DB::table('positions')->where(['class' => $first->name, 'term' => $term->name, 'session' => $session->name])->get();
 
             //select sessions
-            $klasses = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->get();
+            $klasses = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->get();
             $levels = DB::table('levels')->get();
 
             $sessions = DB::table('sessions')->get();
@@ -567,7 +567,7 @@ class TeachersController extends Controller
             // dd($results);
 
             //select sessions
-            $klasses = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->get();
+            $klasses = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->get();
             $levels = DB::table('levels')->get();
 
             $sessions = DB::table('sessions')->get();
@@ -583,13 +583,13 @@ class TeachersController extends Controller
     {
         if ($request->isMethod('GET')) {
             //check if I was assigned a class
-            $check = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->count();
+            $check = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->count();
             //that is if he doesnt have any class assigned
             if ($check < 1) {
                 return back()->with('error', 'You have no classes assigned to you');
             }
             //get my first assigned class
-            $first = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->first();
+            $first = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->first();
             //dd($first);
             //get my current session
             $session = DB::table('sessions')->where('current', 1)->first();
@@ -613,7 +613,7 @@ class TeachersController extends Controller
             $result = DB::table('results')->where(['username' => $student->username, 'class' => $student->class, 'term' => $student->term, 'session' => $student->session])->first();
 
             //select sessions
-            $klasses = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->get();
+            $klasses = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->get();
             $levels = DB::table('levels')->get();
 
             $sessions = DB::table('sessions')->get();
@@ -636,7 +636,7 @@ class TeachersController extends Controller
                 'session' => $request->session, 'username' => $request->username])->first();
 
             //select sessions
-            $klasses = DB::table('assignclasses')->where('teacher_name', Auth::user()->name)->get();
+            $klasses = DB::table('assign_classes')->where('teacher_name', Auth::user()->name)->get();
             $levels = DB::table('levels')->get();
 
             $sessions = DB::table('sessions')->get();

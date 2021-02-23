@@ -149,7 +149,7 @@
 
                                             <tr>
                                                 <td>{{$school_fee_invoice->amount}}</td>
-                                                <td>Paid</td>
+                                                <td>{{$school_fee_invoice->status}}</td>
                                                 <td>{{$school_fee_invoice->session}}</td>
                                                 <td>{{$school_fee_invoice->level}}</td>
                                                 <td>{{$school_fee_invoice->term}}</td>
