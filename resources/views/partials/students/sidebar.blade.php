@@ -24,7 +24,7 @@
             <li><a><i class="fa fa-eye"></i>Check Results <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li><a href="/results"><i class="fa fa-clone"></i>Termly Results</a></li>
-                    <li><a href="/annualresults"><i class="fa fa-refresh"></i>Annual Results</a></li>
+                    <!-- <li><a href="/annualresults"><i class="fa fa-refresh"></i>Annual Results</a></li> -->
                 </ul>
             </li>
 

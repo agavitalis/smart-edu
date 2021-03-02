@@ -43,6 +43,7 @@ class SchoolFeesController extends Controller
                 "level" => $school_fees->level,
                 "term" => $school_fees->term,
                 "amount"  => $school_fees->amount,
+                "status"=>"NOT PAID",
                 "user_id" => Auth::user()->id,
             ]);
            

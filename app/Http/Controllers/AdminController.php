@@ -742,7 +742,9 @@ class AdminController extends Controller
 
             }
         }
-    } // public function studymaterials()
+    } 
+    
+    // public function studymaterials()
     // {
     //     return view('admin.studymaterials');
     // }
